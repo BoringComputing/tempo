@@ -1,0 +1,128 @@
+[meta]
+name = "LPSRE"
+tags = ["LPSRE"]
+
+[particles]
+n_particles = 33
+mass = 72.0
+max_molecule_size = 200
+
+[simulation]
+# Number of total time steps in the simulation in [picoseconds].
+n_steps = 10000
+# Frequency of trajectory/energy file output in time steps.
+n_print = 100
+# Frequency of requesting that the HDF5 library flush the file output buffers
+# to disk after in number of n_print timesteps.
+n_flush = 5 #(50 ##5000) ## saving every 20th step
+# Time step used in the simulation in [picoseconds].
+time_step = 0.05
+# Simulation box size in [nanometers].
+box_size = [17.87900, 11.32210, 10.33340]
+# Time integrator used in the simulation. Either "velocity-verlet" or "respa".
+# If "respa", specify also the number of small rRESPA time steps per large
+# time_step with the 'respa_inner' keyword.
+integrator = "respa"
+respa_inner = 20
+# Perform MPI rank domain decomposition every x time steps to (hopefully)
+# reduce the amount of neccessary communication between ranks in the pmesh
+# procedures. Ommit or set to 'false' or '0' to not perform any domain
+# decomposition.
+domain_decomposition = 50000
+# Starting temperature to generate before simulation begins in [kelvin]. Ommit
+# or set to 'false' to not change the temperature before starting.
+start_temperature = 300
+# Target temperature used in the velocity rescale thermostat in [kelvin]. Ommit
+# or set to 'false' to use no thermostat, i.e. a constant energy simulation.
+target_temperature = 300
+cancel_com_momentum = 20
+# Thermostat collision frequency in [1/picoseconds].
+tau = 0.7
+# Couple groups of particles species to individual different thermostats.
+thermostat_coupling_groups = [
+  ["P", "G", "L", "C"]
+]
+
+
+# The energy functional W[phi] to use. Options:
+#    "SquaredPhi":      ?~F² / 2κ?~F?~B~@,
+#    "DefaultNoChi":   (?~F - ?~F?~B~@)² / 2κ?~F?~B~@
+#    "DefaultWithChi": (?~F - ?~F?~B~@)² / 2κ?~F?~B~@ + Σ ?~G?~F?~F' / ?~F?~B~@
+# Subclass Hamiltonian to create a new energy functional.
+hamiltonian = 'DefaultWithChi'
+
+###  Electrostatic
+# coulombtype = 'PIC_Spectral_GPE' # algo type with charge and variable dielectric
+coulombtype = 'PIC_Spectral' # algo type w. charge only
+dielectric_const = 80.0 # this should be done differently
+# Dielectric values can be given here as a list
+# dielectric_type (list)
+dielectric_type = [
+  [["C"], [5.0]],
+  [["W"], [80.0]],
+  [["L"], [5.0]],
+  [["P"], [1.0]],
+  [["G"], [5.0]],
+  [["N"], [1.0]],
+]
+
+
+[field]
+mesh_size = [36, 18, 18]
+kappa = 0.05
+sigma = 0.5
+chi = [
+  ["L", "G", 4.5],
+  ["L", "C", 13.25],
+  ["G", "P", 4.5],
+  ["C", "W",  33.75],
+  ["P", "C", 20.0],
+  ["P", "W", -3.6],
+  ["N", "P", -7.2],
+  ["N", "C", 13.25],
+  ["G", "C", 8.3],
+  ["G", "W", 4.5],
+]
+# L  - carboxyl/hydroxyl
+# G - ester, amides
+# C - carbon (chain)
+# P - phosphate
+# N - ion (ca2+ ion)
+# W - water
+
+[bonds]
+# Two-particle bonds, ((atom name 1, atom name 2), (equilibrium length in
+# [nanometers], bond strenght in [kJ/mol])). Note the two
+bonds = [
+  ["P", "G", 0.41, 1250.0],
+  ["G", "G", 0.36, 1250.0],
+  ["L", "G", 0.38, 1250.0],
+  ["G", "C", 0.34, 1250.0],
+  ["L", "C", 0.37, 1250.0],
+  ["C", "C", 0.39, 1250.0],
+  ["P", "L", 0.36, 1250.0],
+  ["L", "L", 0.28, 1250.0],
+]
+# Three-particle angular bonds, ((atom name 1, atom name 2, atom name 3),
+# (equilibrium angle in [degrees], bond strenght in [kJ/mol])).
+angle_bonds = [
+  ["P", "G", "G", 109.5, 25.0],
+  ["P", "G", "L", 70.9, 25.0],
+  ["G", "G", "G", 92.2, 25.0],
+  ["L", "G", "L", 113.6, 25.0],
+  ["L", "G", "G", 129.8, 25.0],
+  ["C", "C", "C", 150.4, 25.0],
+  ["L", "C", "C", 150.9, 25.0],
+  ["G", "L", "G", 123.8, 25.0],
+  ["G", "L", "C", 130.7, 25.0],
+  ["C", "G", "G", 120.7, 25.0],
+  ["C", "C", "G", 138.2, 25.0],
+  ["G", "P", "L", 99.6, 25.0],
+  ["L", "P", "L", 87.5, 25.0],
+  ["L", "L", "L", 136.4, 25.0],
+  ["P", "L", "P", 156.6, 25.0],
+  ["P", "L", "L", 124.0, 25.0],
+  ["G", "L", "L", 134.7, 25.0], 
+  ["C", "G", "C", 96.7, 25.0],
+]
+

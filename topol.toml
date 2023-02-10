@@ -1,0 +1,7 @@
+[system]
+molecules = [
+    ["LPSRE", 1],
+]
+include = [
+    "./LPSRE.toml",
+]
