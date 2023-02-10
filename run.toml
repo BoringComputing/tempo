@@ -57,14 +57,6 @@ coulombtype = 'PIC_Spectral' # algo type w. charge only
 dielectric_const = 80.0 # this should be done differently
 # Dielectric values can be given here as a list
 # dielectric_type (list)
-dielectric_type = [
-  [["C"], [5.0]],
-  [["W"], [80.0]],
-  [["L"], [5.0]],
-  [["P"], [1.0]],
-  [["G"], [5.0]],
-  [["N"], [1.0]],
-]
 
 
 [field]
